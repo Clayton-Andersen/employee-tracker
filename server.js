@@ -2,7 +2,6 @@ const inquirer = require('inquirer')
 const connection = require('./db/connection')
 
 const mainMenu = () => {
-    //view all departments, view all roles, view all employees, add a department, add a role, add an employee, and update an employee role
     inquirer.prompt([{
         type: 'list',
         name: 'userSelection',
@@ -16,7 +15,24 @@ const mainMenu = () => {
             value: 'viewRoles'
         },
         {
-//continue
+            name: 'View all employees',
+            value: 'viewEmployees'
+        },
+        {
+            name: 'Add a department',
+            value: 'addDepartment'
+        },
+        {
+            name: 'Add a role',
+            value: 'addRole'
+        },
+        {
+            name: 'Add an employee',
+            value: 'addEmployee'
+        },
+        {
+            name: 'Update an employees role',
+            value: 'updateEmployeeRole'
         }]
     }])
     .then(({ userSelection }) => {
@@ -27,7 +43,21 @@ const mainMenu = () => {
             case 'viewRoles':
                 viewRoles();
                 break;
-            //repeat:
+            case 'viewEmployees':
+                viewEmployees();
+                break;
+            case 'addDepartment':
+                addDepartment();
+                break;
+            case 'addRole':
+                addRole();
+                break;
+            case 'addEmployee':
+                addEmployee();
+                break;
+            case 'updateEmployeeRole':
+                updateEmployeeRole();
+                break;
         }
     })
 }
@@ -38,12 +68,42 @@ const viewDepartments = () => {
         mainMenu();
     })
 }
-
 const viewRoles = () =>  {
     connection.query('SELECT * FROM role LEFT JOIN department ON role.department_id = department.id;', (error, data) => {
         console.table(data)
         mainMenu();
     })
 }
+const viewEmployees = () =>  {
+    connection.query('SELECT * FROM employee', (error, data) => {
+        console.table(data)
+        mainMenu();
+    })
+}
+const addDepartment = () =>  {
+    connection.query('SELECT * FROM role LEFT JOIN department ON role.department_id = department.id;', (error, data) => {
+        console.table(data)
+        mainMenu();
+    })
+}
+const addRole = () =>  {
+    connection.query('SELECT * FROM role LEFT JOIN department ON role.department_id = department.id;', (error, data) => {
+        console.table(data)
+        mainMenu();
+    })
+}
+const addEmployee = () =>  {
+    connection.query('SELECT * FROM role LEFT JOIN department ON role.department_id = department.id;', (error, data) => {
+        console.table(data)
+        mainMenu();
+    })
+}
+const updateEmployeeRole = () =>  {
+    connection.query('SELECT * FROM role LEFT JOIN department ON role.department_id = department.id;', (error, data) => {
+        console.table(data)
+        mainMenu();
+    })
+}
+
 
 mainMenu();
