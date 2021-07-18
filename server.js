@@ -75,10 +75,11 @@ const viewRoles = () =>  {
     })
 }
 const viewEmployees = () =>  {
-    connection.query('SELECT * FROM employee', (error, data) => {
+    connection.query('SELECT * FROM employee JOIN role ON employee.role_id = role.id', (error, data) => {
         console.table(data)
         mainMenu();
     })
+//Section needs work from here down!!!
 }
 const addDepartment = () =>  {
     connection.query('SELECT * FROM role LEFT JOIN department ON role.department_id = department.id;', (error, data) => {
