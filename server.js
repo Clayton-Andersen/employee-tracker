@@ -75,8 +75,9 @@ const viewRoles = () => {
     })
 }
 const viewEmployees = () => {
-    connection.query('SELECT * FROM employee JOIN role ON employee.role_id = role.id', (error, data) => {
+    connection.query('SELECT employee.id, employee.first_name, employee.last_name, manager.last_name AS manager, role.title, role.salary, department.name AS department FROM employee JOIN role ON employee.role_id = role.id LEFT JOIN employee manager ON manager.id = employee.manager_id LEFT JOIN department ON role.department_id = department.id', (error, data) => {
         console.table(data)
+        console.log(error)
         mainMenu();
     })
 
@@ -121,18 +122,53 @@ const addRole = () => {
         })
     })
 };
-const addEmployee = () => {
-    connection.query('SELECT * FROM role LEFT JOIN department ON role.department_id = department.id;', (error, data) => {
-        console.table(data)
-        mainMenu();
-    })
+const addEmployee = async () => {
+    const roles = await connection.promise().query('SELECT * FROM role')
+    const manager = await connection.promise().query('SELECT first_name, last_name, id FROM employee')
+    const employeeType = await inquirer.prompt([{
+        name: 'first_name',
+        message: 'What is the first name of the employee you\'re adding?',
+        type: 'input'
+    },
+    {
+        name: 'last_name',
+        message: 'What is the last name of the employee you\'re adding?',
+        type: 'input'
+    },
+    {
+        name: 'role',
+        message: 'What role would you like to add?',
+        type: 'list',
+        choices: roles[0].map((role) => ({ name: role.title, value: role.id }))
+    },
+    {
+        name: 'manager',
+        message: 'Who is the manager of this employee?',
+        type: 'list',
+        choices: manager[0].map((manager) => ({ name: `${manager.first_name} ${manager.last_name}`, value: manager.id}))
+    }])
+    const addEmp = await connection.promise().query('INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)', 
+    [employeeType.first_name, employeeType.last_name, employeeType.role, employeeType.manager])
+    console.log('Employee added successfully!')
+    mainMenu();
 }
 const updateEmployeeRole = () => {
-    connection.query('SELECT * FROM role LEFT JOIN department ON role.department_id = department.id;', (error, data) => {
+    connection.query('SELECT * FROM role LEFT JOIN department ON role.department_id = department.id;', async (error, data) => {
         console.table(data)
+        const prompt = await inquirer.prompt([{
+            name: 'role',
+            message: 'Which role would you like to update?',
+            type: 'list',
+            choices: data.map((role) => ({ name: role.title, value: role.id }))
+        },
+    {
+        name: 'salary',
+        message: 'What would you like to update the salary to?',
+        type: 'input'
+    }])
+        const updateEmpRole = await connection.promise().query('UPDATE role SET salary = ? WHERE id = ?', [prompt.salary, prompt.role])
         mainMenu();
     })
 }
-
 
 mainMenu();
