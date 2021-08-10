@@ -15,6 +15,7 @@ You'll need to be able to access mysql so be sure to start by creating an accoun
 ## Usage
 Video and screen shots are provided below:
  https://drive.google.com/file/d/1W3a93ZihvEWPgAclqxmYQqo6DAwYba4J/view
+ ![image](https://user-images.githubusercontent.com/82545902/128946056-b09bd94c-85a5-43ad-9596-3677f1caa015.png)
 
 ## Credits
 https://github.com/Clayton-Andersen
