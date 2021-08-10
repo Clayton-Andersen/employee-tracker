@@ -1,4 +1,4 @@
-# Clayton Anderse
+# Employee Tracker
 
 ## description
 A command-line application to manage a company's employee database, using Node.js, Inquirer, and MySQL. Application will promp and accept user input and display output.
